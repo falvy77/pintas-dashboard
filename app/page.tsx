@@ -2,8 +2,21 @@
 import { useEffect, useState } from 'react'
 import { supabase } from './supabase'
 
+interface Destination {
+  platform: string
+  url: string
+  weight: number
+}
+
+interface Link {
+  id: string
+  name: string
+  slug: string
+  destinations: Destination[]
+}
+
 export default function Home() {
-  const [links, setLinks] = useState([])
+  const [links, setLinks] = useState<Link[]>([])
   const [name, setName] = useState('')
   const [slug, setSlug] = useState('')
   const [shopeeUrl, setShopeeUrl] = useState('')
@@ -23,7 +36,7 @@ export default function Home() {
   async function createLink() {
     if (!name || !slug || !shopeeUrl) return setMsg('Nama, slug, dan URL Shopee wajib diisi')
     setLoading(true)
-    const destinations = []
+    const destinations: Destination[] = []
     if (shopeeUrl) destinations.push({ platform: 'shopee', url: shopeeUrl, weight: 60 })
     if (tokopediaUrl) destinations.push({ platform: 'tokopedia', url: tokopediaUrl, weight: 40 })
     const { error } = await supabase.from('links').insert({ name, slug, destinations })
@@ -44,10 +57,10 @@ export default function Home() {
 
       <div style={{ border: '1px solid #e5e5e5', borderRadius: 12, padding: 24, marginBottom: 32 }}>
         <h2 style={{ fontSize: 16, fontWeight: 600, marginBottom: 16 }}>Buat link baru</h2>
-        <input placeholder="Nama produk (contoh: Sepatu Kets Promo)" value={name} onChange={e => setName(e.target.value)} style={{ width: '100%', padding: '10px 12px', border: '1px solid #e5e5e5', borderRadius: 8, marginBottom: 10, fontSize: 14 }} />
-        <input placeholder="Slug (contoh: sepatu-kets) — tanpa spasi" value={slug} onChange={e => setSlug(e.target.value.toLowerCase().replace(/\s+/g, '-'))} style={{ width: '100%', padding: '10px 12px', border: '1px solid #e5e5e5', borderRadius: 8, marginBottom: 10, fontSize: 14 }} />
-        <input placeholder="URL Shopee Affiliate lo" value={shopeeUrl} onChange={e => setShopeeUrl(e.target.value)} style={{ width: '100%', padding: '10px 12px', border: '1px solid #e5e5e5', borderRadius: 8, marginBottom: 10, fontSize: 14 }} />
-        <input placeholder="URL Tokopedia Affiliate lo (opsional)" value={tokopediaUrl} onChange={e => setTokopediaUrl(e.target.value)} style={{ width: '100%', padding: '10px 12px', border: '1px solid #e5e5e5', borderRadius: 8, marginBottom: 16, fontSize: 14 }} />
+        <input placeholder="Nama produk" value={name} onChange={(e) => setName(e.target.value)} style={{ width: '100%', padding: '10px 12px', border: '1px solid #e5e5e5', borderRadius: 8, marginBottom: 10, fontSize: 14 }} />
+        <input placeholder="Slug (contoh: sepatu-kets)" value={slug} onChange={(e) => setSlug(e.target.value.toLowerCase().replace(/\s+/g, '-'))} style={{ width: '100%', padding: '10px 12px', border: '1px solid #e5e5e5', borderRadius: 8, marginBottom: 10, fontSize: 14 }} />
+        <input placeholder="URL Shopee Affiliate" value={shopeeUrl} onChange={(e) => setShopeeUrl(e.target.value)} style={{ width: '100%', padding: '10px 12px', border: '1px solid #e5e5e5', borderRadius: 8, marginBottom: 10, fontSize: 14 }} />
+        <input placeholder="URL Tokopedia Affiliate (opsional)" value={tokopediaUrl} onChange={(e) => setTokopediaUrl(e.target.value)} style={{ width: '100%', padding: '10px 12px', border: '1px solid #e5e5e5', borderRadius: 8, marginBottom: 16, fontSize: 14 }} />
         {msg && <p style={{ color: msg.includes('Error') ? 'red' : 'green', marginBottom: 12, fontSize: 13 }}>{msg}</p>}
         <button onClick={createLink} disabled={loading} style={{ background: '#18181b', color: '#fff', border: 'none', borderRadius: 8, padding: '10px 20px', fontSize: 14, cursor: 'pointer' }}>
           {loading ? 'Menyimpan...' : 'Buat link'}
@@ -63,7 +76,7 @@ export default function Home() {
             smart-rotator.pintas.workers.dev/{link.slug}
           </a>
           <div style={{ marginTop: 8, display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-            {link.destinations.map(d => (
+            {link.destinations.map((d: Destination) => (
               <span key={d.platform} style={{ fontSize: 12, background: '#f4f4f5', borderRadius: 20, padding: '2px 10px', color: '#52525b' }}>
                 {d.platform} {d.weight}%
               </span>
