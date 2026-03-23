@@ -53,7 +53,7 @@ export default function Home() {
   return (
     <main style={{ maxWidth: 700, margin: '40px auto', padding: '0 20px', fontFamily: 'sans-serif' }}>
       <h1 style={{ fontSize: 24, fontWeight: 600, marginBottom: 8 }}>Pintas Dashboard</h1>
-      <p style={{ color: '#666', marginBottom: 32 }}>Smart affiliate link rotator</p>
+      <p style={{ color: '#666', marginBottom: 32 }}>Smart affiliate link rotator · <a href="/analytics" style={{ color: '#2563eb' }}>Lihat analytics →</a></p>
 
       <div style={{ border: '1px solid #e5e5e5', borderRadius: 12, padding: 24, marginBottom: 32 }}>
         <h2 style={{ fontSize: 16, fontWeight: 600, marginBottom: 16 }}>Buat link baru</h2>
